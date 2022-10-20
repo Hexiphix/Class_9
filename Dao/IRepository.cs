@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Class_9.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Class_9.Dao
 {
     public interface IRepository
     {
-        void Add();
-        void Get();
+        void Add(Animal animal);
+        List<Animal> Get();
     }
 }
