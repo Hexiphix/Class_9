@@ -25,5 +25,10 @@ namespace Class_9.Dao
         {
             return _context.Dogs;
         }
+
+        public Animal Search(string searchString)
+        {
+            return _context.Dogs.First(a => a.Name == searchString);
+        }
     }
 }

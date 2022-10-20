@@ -13,6 +13,9 @@ public class MainService : IMainService
 {
     private readonly IRepository _repo;
 
+    //private Nullable<int> myInt;
+    //private int? myInt2;
+
     public MainService(IRepository repo)
     {
         _repo = repo;
@@ -21,14 +24,33 @@ public class MainService : IMainService
     public void Invoke()
     {
         var animals = _repo.Get();
+
+        var searchedAnimal = _repo.Search("Rover");
+        Console.WriteLine(searchedAnimal.Name);
+        Console.WriteLine("============");
+
+        foreach (var animal in animals.OrderBy(a => a.Name))
+        {
+            Console.WriteLine(animal?.Name);
+        }
+
         //var filteredAnimals = animals.Where(a => FilterAnimals(a));
         //var filteredAnimals = animals.Where(FilterAnimals);
-        var filteredAnimals = animals.Where(a => a.Name == "Rover");        
+        //var animal = animals.FirstOrDefault(a => a.Name == "Snoopy");
 
+        var pageSize = 3;
+        var page = 0;
 
-        foreach (var animal in filteredAnimals)
+        for (int i = 0; i < animals.Count/pageSize; i++)
         {
-            Console.WriteLine(animal.Name);
+            var pagedAnimals = animals.Skip(page*pageSize).Take(pageSize);
+            page++;
+
+            foreach (var animal in pagedAnimals)
+            {
+                Console.WriteLine(animal?.Name);
+            }
+            Console.WriteLine("------");
         }
     }
 

@@ -11,5 +11,7 @@ namespace Class_9.Dao
     {
         void Add(Animal animal);
         List<Animal> Get();
+
+        Animal Search(string searchString);
     }
 }

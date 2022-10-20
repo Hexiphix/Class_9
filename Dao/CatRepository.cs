@@ -25,5 +25,10 @@ namespace Class_9.Dao
         {
             return _context.Cats;
         }
+
+        public Animal Search(string searchString)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
