@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Class_9.Dao
 {
-    public class DogRepository : IRepository
+    public class DogRepository : IRepository<Dog>
     {
         private Context _context;
 

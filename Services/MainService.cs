@@ -2,6 +2,8 @@
 using System;
 using System.Linq;
 using Class_9.Models;
+using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 namespace Class_9.Services;
 
@@ -11,51 +13,69 @@ namespace Class_9.Services;
 /// </summary>
 public class MainService : IMainService
 {
-    private readonly IRepository _repo;
+    private readonly IRepository<Dog> _dogRepo;
+    private readonly IRepository<Cat> _catRepo;
 
-    //private Nullable<int> myInt;
-    //private int? myInt2;
-
-    public MainService(IRepository repo)
+    public MainService(IRepository<Dog> dogRepo, IRepository<Cat> catRepo)
     {
-        _repo = repo;
+        _dogRepo = dogRepo;
+        _catRepo = catRepo;
     }
 
     public void Invoke()
     {
-        var animals = _repo.Get();
-
-        var searchedAnimal = _repo.Search("Rover");
-        Console.WriteLine(searchedAnimal.Name);
-        Console.WriteLine("============");
-
-        foreach (var animal in animals.OrderBy(a => a.Name))
+        string userInput = null;
+        do
         {
-            Console.WriteLine(animal?.Name);
-        }
+            Console.WriteLine("Choose your selection:");
+            Console.WriteLine("1: List Dogs");
+            Console.WriteLine("2: List Cats");
+            Console.WriteLine("3: Search for a Pet by Name");
+            Console.WriteLine("X: Exit");
 
-        //var filteredAnimals = animals.Where(a => FilterAnimals(a));
-        //var filteredAnimals = animals.Where(FilterAnimals);
-        //var animal = animals.FirstOrDefault(a => a.Name == "Snoopy");
+            userInput = Console.ReadLine();
 
-        var pageSize = 3;
-        var page = 0;
-
-        for (int i = 0; i < animals.Count/pageSize; i++)
-        {
-            var pagedAnimals = animals.Skip(page*pageSize).Take(pageSize);
-            page++;
-
-            foreach (var animal in pagedAnimals)
+            switch (userInput)
             {
-                Console.WriteLine(animal?.Name);
+                case "1":
+                    var dogs = _dogRepo.Get().ToList();
+                    dogs.ForEach(x => Console.WriteLine(x.Name));
+                    break;
+
+                case "2":
+                    var cats = _catRepo.Get().ToList();
+                    cats.ForEach(x => Console.WriteLine(x.Name));
+                    break;
+
+                case "3":
+                    Console.WriteLine("Enter the pet name:");
+                    var petName = Console.ReadLine();
+
+                    var dog = _dogRepo.Search(petName);
+                    if (dog == null)
+                    {
+                        Console.WriteLine($"You didn't find a dog with name containing {petName}!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"You found a dog named {dog.Name}!");
+                    }
+
+                    var cat = _catRepo.Search(petName);
+                    if (cat == null)
+                    {
+                        Console.WriteLine($"You didn't find a cat with name containing {petName}!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"You found a cat named {cat.Name}!");
+                    }
+                    break;
+
+                default:
+                    break;
             }
-            Console.WriteLine("------");
-        }
+        } while (userInput != null && userInput != "X");
     }
 
-    private bool FilterAnimals(Animal a)
-    {
-        return a.Name == "Rover";
-    }
 }

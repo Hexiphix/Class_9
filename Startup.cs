@@ -1,5 +1,6 @@
 ﻿using System;
 using Class_9.Dao;
+using Class_9.Models;
 using Class_9.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,7 +24,8 @@ internal class Startup
 
         // Add new lines of code here to register any interfaces and concrete services you create
         services.AddTransient<IMainService, MainService>();
-        services.AddTransient<IRepository, DogRepository>();
+        services.AddSingleton<IRepository<Dog>>(_ => DataServiceFactory.GetRepositoryInstance<Dog, Repository<Dog>>());
+        services.AddSingleton<IRepository<Cat>>(_ => DataServiceFactory.GetRepositoryInstance<Cat, Repository<Cat>>());
 
         return services.BuildServiceProvider();
     }

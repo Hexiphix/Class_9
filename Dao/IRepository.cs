@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace Class_9.Dao
 {
-    public interface IRepository
+    public interface IRepository<T> where T : Animal
     {
-        void Add(Animal animal);
-        List<Animal> Get();
-
-        Animal Search(string searchString);
+        void Add(T animal);
+        IEnumerable<T> Get();
+        T Search(string searchString);
     }
 }
